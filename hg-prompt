@@ -1,0 +1,46 @@
+
+# function _hg_headname() {
+# 
+# }                              
+# 
+# function _hg_upstream_state() {
+# 
+# }
+# 
+# function _hg_repo_state () {
+# 
+# }
+# function _hg_workdir() {
+# 
+# }                                                                                   
+# 
+# function _hg_dirty() {
+# 
+# }                                                                                     
+# 
+# function _hg_dirty_stash() {
+# 
+# }
+
+#PS1='`_hg_headname``_hg_upstream_state`!`_hg_repo_state``_hg_workdir``_hg_dirty``_hg_dirty_stash`> '
+
+
+# detect whether the tree is in a dirty state.
+_hg_dirty() {
+	if [[ "`hg status`" = "" ]] ; then
+		return ''
+	fi
+	
+	return ' *'
+	
+	return 1
+	# local dirty_marker="`git config gitsh.dirty 2>/dev/null || echo ' *'`"
+	# 
+	# if ! git diff --quiet 2>/dev/null ; then
+	# 	_git_apply_color "$dirty_marker" "color.sh.dirty" "red"
+	# elif ! git diff --staged --quiet 2>/dev/null ; then
+	# 	_git_apply_color "$dirty_marker" "color.sh.dirty-staged" "yellow"
+	# else
+	# 	return 0
+	# fi
+}

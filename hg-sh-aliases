@@ -1,0 +1,87 @@
+function _h-nb() {
+  if [[ $2 != "" ]]; then
+			hg update $2             
+	fi
+	
+	hg bookmarks $1
+}
+
+function _h-repull() {
+  bookmark=`hg bo | grep '*' | cut -f 3 -d' '`
+	hg pull --rebase
+	hg update $bookmark
+}
+
+        
+alias help='hg help'
+alias mg='hg graft'
+alias show='hg show'
+alias co='hg update'
+alias st='hg status'
+alias s='hg summary'
+alias br='hg bookmarks'
+alias bk='hg bookmarks'
+alias chkpoint='hg chkpoint'
+alias l='hg lg'
+alias lg='hg lg'   
+alias log='hg lg'
+alias sack='hg sack'
+alias back='hg back'      
+alias revert='hg revert'
+alias uncommit='hg uncommit'
+alias rt='hg revert --all'
+alias nc='hg nc'
+alias repull='hg repull'
+alias hei='hg histedit -k .~10'
+alias he='hg histedit -k '
+alias rb='hg rebase '
+alias shelve='hg shelve'
+alias shl='hg shelve'
+alias unshelve='hg unshelve'
+alias us='hg unshelve'
+alias amend-quick='hg ammend-quick'
+alias amend='hg amend'
+alias wipe='hg wipe'
+alias heads='hg heads'
+alias diff='hg diff'
+alias df='hg df'
+
+alias h=hg  
+alias h-show='hg show'
+alias h-co='hg update'
+alias h-st='hg status'
+alias h-s='hg statusummary'
+alias h-br='hg bookmarks'
+alias h-nb=_h-nb
+alias h-chkpoint='hg status | hg commit -A --logfile -'
+alias h-log='hg log -v'
+alias h-lg='hg log -v'
+alias h-back='hg reset .^'
+alias h-rt='hg revert --all'
+alias h-nc='hg uncommit -a'
+#alias h-repull='hg pull --rebase'
+alias h-repull=_h-repull
+alias h-hei='hg histedit -k .~10'
+alias h-he='hg histedit -k '
+alias h-rb='hg rebase '
+alias h-amend-quick='hg log -r . | hg commit --amend -l -'
+
+alias hg-sh=h-show
+alias hg-co=h-co
+alias hg-st=h-st
+alias hg-s=h-s
+alias hg-br=h-br
+alias hg-nb=h-nb
+alias hg-chkpoint=h-chkpoint
+alias hg-log=h-log
+alias hg-lg=h-lg
+alias hg-back=h-back
+alias hg-rt=h-rt
+alias hg-nc=h-nc
+alias hg-repull=h-repull
+alias hg-repull=h-repull
+alias hg-hei=h-hei
+alias hg-he=h-he
+alias hg-rb=h-rb
+alias hg-amend-quick=h-amend-quick
+

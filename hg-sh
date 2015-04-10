@@ -1,0 +1,19 @@
+#!/bin/bash
+                              
+set -e
+#set -x                              
+
+path=$HG_SH_PATH
+#unset in case we crash
+#if [[ "$HG_SH_PATH" == "" ]]; then
+  export HG_SH_PATH=`dirname $0`
+  export HG_SH_PATH=$(cd "$HG_SH_PATH" && pwd)
+#fi                                            
+
+
+if [ "$0" != 'bash' ]; then
+  exec /usr/bin/env bash --rcfile "$0" "$@"
+else  
+  source $path/hg-bootstrap $path
+fi
+
