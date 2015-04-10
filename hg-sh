@@ -3,10 +3,17 @@
 set -e
 #set -x                              
 
+readlink_cmd='readlink -f'
+
+if uname -a | grep -qi "darwin" ; then
+  readlink_cmd='readlink.sh'
+fi
+
 path=$HG_SH_PATH
 #unset in case we crash
 #if [[ "$HG_SH_PATH" == "" ]]; then
-  export HG_SH_PATH=`dirname $0`
+  script_path=`$readlink_cmd  $0`
+  export HG_SH_PATH=`dirname $script_path`
   export HG_SH_PATH=$(cd "$HG_SH_PATH" && pwd)
 #fi                                            
 
