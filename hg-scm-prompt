@@ -32,14 +32,13 @@ _hg_dirty() {
 	if [[ "`hg status`" = "" ]] ; then
 		echo -ne ""
 	else
-		echo -ne " ${Red}*"
+    _color_apply " *" $Red
 	fi
-	
-	return 0;
 }                        
 
 _hg_bang() {
-	echo -e "\[${Green}${On_Black}!\]"
+  _color_apply "!" $Green $On_Black
+
 }
 
 _hg_workdir() {
@@ -62,7 +61,7 @@ _color_apply() {
   local output="$1"
 	local fg_color="$2"
 	local bg_color="$3" || ""
-	echo -ne "\[$fg_color$bg_color$output\]"
+	echo -ne "\[$fg_color$bg_color\]$output"
 }
 
 _dotfiles_scm_info()

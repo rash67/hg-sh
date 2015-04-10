@@ -45,6 +45,8 @@ alias wipe='hg wipe'
 alias heads='hg heads'
 alias diff='hg diff'
 alias df='hg df'
+alias slr='hg slr'
+alias sl='hg sl'
 
 alias h=hg  
 alias h-show='hg show'
