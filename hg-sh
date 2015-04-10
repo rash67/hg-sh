@@ -1,7 +1,23 @@
 #!/bin/bash
-                              
-set -e
+
 #set -x                              
+
+set_hg_sh_path() {
+  script_path=`$readlink_cmd  $0`
+  export HG_SH_PATH=`dirname $script_path`
+  export HG_SH_PATH=$(cd "$HG_SH_PATH" && pwd)  
+}
+
+hg_bootstrap() {
+  hg_sh_path=$1
+  source ~/.bashrc                              
+  source $hg_sh_path/hg-colors
+  source $hg_sh_path/hg-sh-aliases
+  source $hg_sh_path/hg-completion.bash
+  source $hg_sh_path/hg-scm-prompt
+}
+
+################################ * main *
 
 readlink_cmd='readlink -f'
 
@@ -10,17 +26,12 @@ if uname -a | grep -qi "darwin" ; then
 fi
 
 path=$HG_SH_PATH
-#unset in case we crash
-#if [[ "$HG_SH_PATH" == "" ]]; then
-  script_path=`$readlink_cmd  $0`
-  export HG_SH_PATH=`dirname $script_path`
-  export HG_SH_PATH=$(cd "$HG_SH_PATH" && pwd)
-#fi                                            
-
+set_hg_sh_path
 
 if [ "$0" != 'bash' ]; then
   exec /usr/bin/env bash --rcfile "$0" "$@"
 else  
-  source $path/hg-bootstrap $path
+  hg_bootstrap $path
 fi
+
 

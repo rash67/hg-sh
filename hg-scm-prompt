@@ -24,8 +24,8 @@ _hg_ps1() {
 	workdir=`_hg_workdir`
 	dirty=`_hg_dirty`
 	bang=`_hg_bang`
-	color_off=`_color_apply "" $Color_Off`
-	export PS1="${current_rev}$bang${workdir}${dirty}$color_off> "
+	color_off=`_color_apply '' $Color_Off`
+	export PS1="${current_rev}${bang}${workdir}${dirty}${color_off}> "
 }
 
 _hg_dirty() {
