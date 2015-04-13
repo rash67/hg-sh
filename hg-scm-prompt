@@ -13,7 +13,13 @@
 # the $(...) (as above), but not both. Which one you use depends on if
 # you need the rest of your PS1 to interpolate variables.                               
 
-source ~/.bash-colors
+
+readlink_cmd='readlink -f'
+                                   
+if uname -a | grep -qi "darwin" ; then
+  readlink_cmd='readlink.sh'
+fi
+
 
 #export PS1="\$(_hg_current_rev)!\$(_hg_workdir)\$(_hg_dirty)> "
 #alias reset_color="echo -e '\e[2J\n\n'"
@@ -45,7 +51,8 @@ _hg_workdir() {
 	subdir=`hg root`
 	subdir="${subdir#/}"
   subdir="${subdir%/*}"
-	workdir="${PWD#/$subdir}"
+  dir=`$readlink_cmd $PWD`
+	workdir="${dir#/$subdir}"
 	workdir="${workdir#/}"
 	_color_apply $workdir $Blue
 }
