@@ -2,6 +2,13 @@
 
 #set -x                              
 
+get_current_pwd() {
+  script_path=`$readlink_cmd  $0`
+  path=`dirname $script_path`
+  path=$(cd $path && pwd)
+  echo -ne "$path"
+}
+
 set_hg_sh_path() {
   script_path=`$readlink_cmd  $0`
   export HG_SH_PATH=`dirname $script_path`
@@ -12,7 +19,7 @@ hg_bootstrap() {
   hg_sh_path=$1
   source ~/.bashrc                              
   source $hg_sh_path/hg-colors
-  source $hg_sh_path/hg-sh-aliases
+  source $hg_sh_path/hg-sh-aliases "$hg_sh_path"
   source $hg_sh_path/hg-completion.bash
   source $hg_sh_path/hg-scm-prompt
 }
@@ -20,7 +27,7 @@ hg_bootstrap() {
 ################################ * main *
 
 readlink_cmd='readlink -f'
-
+                                   
 if uname -a | grep -qi "darwin" ; then
   readlink_cmd='readlink.sh'
 fi
