@@ -1,7 +1,7 @@
 [alias]      
 chkpoint = !$HG status | $HG commit -A --logfile -
 amend-quick = !$HG log -r . | $HG commit -A --amend -l -
-append = !($HG log -r . ; $HG status) | $HG commit -A --amend -l -
+append = !$HG diff -r .^ --stat | $HG commit -A --amend -l -
 mg = graft
 bk = bookmark
 br = bookmark  
@@ -13,9 +13,8 @@ sh = show
 rb = rebase
 s = summary
 st = status
-#sack = !$HG reset .^ && $HG add
-nc = !$HG uncommit --all && $HG commit --amend -m ""
-sack = uncommit --all
+nc = !$HG uncommit --all && $HG commit --amend -m "" -X '.*'
+sack = !$HG uncommit --all && $HG commit --amend -m "" -X '.*'
 back = reset .^
 repull = pull --rebase
 bcr = log -r 'sort(bookmark(), date)' -T '{bookmarks % "{bookmark}\t\t{date|isodate}\n"}'
@@ -27,3 +26,6 @@ shl = shelve
 us = unshelve
 df = diff --stat
 swf= diff -r .^ --stat
+rl = resolve --list
+clean-obs = !$HG strip -r "hidden()" --hidden && rm .hg/store/obsstore
+au = add

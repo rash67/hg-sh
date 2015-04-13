@@ -47,6 +47,8 @@ alias diff='hg diff'
 alias df='hg df'
 alias slr='hg slr'
 alias sl='hg sl'
+alias rl='hg rl'
+alias append='hg append'
 
 alias h=hg  
 alias h-show='hg show'
