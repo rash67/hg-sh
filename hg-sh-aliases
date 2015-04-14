@@ -63,5 +63,7 @@ hg-alias shl shelve
 hg-alias us unshelve
 hg-alias au addremove
 hg-alias add add
+hg-alias rb rebase
+hg-alias sl sl
 
 alias h=hg  
