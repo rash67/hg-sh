@@ -46,40 +46,21 @@ done
 hg_sh_path=$1
 hg_cmd_alias_file="$hg_sh_path/hg-cmd-aliases"
 for i in `grep '=' $hg_cmd_alias_file | cut -f 1 -d=`; do 
+  #echo hg-alias $i $i
   hg-alias $i $i
 done
 
-# hg-alias co update
-# hg-alias help help
-# hg-alias mg graft        
-# hg-alias show show
-# hg-alias st status
-# hg-alias s summary
-# hg-alias br bookmarks
-# hg-alias bk bookmarks
-# hg-alias chkpoint chkpoint
-# hg-alias l lg
-# hg-alias lg lg
-# hg-alias log log
-# hg-alias sack sack
-# hg-alias back back
-# hg-alias revert revert
-# hg-alias uncommit uncommit
-# hg-alias rt rt
-# hg-alias repull repull
-# hg-alias shelve shelve
-# hg-alias shl shelve
-# hg-alias unshelve unshelve
-# hg-alias us unshelve
-# hg-alias amend-quick amend-quick
-# hg-alias amend amend
-# hg-alias wipe wipe
-# hg-alias heads heads
-# hg-alias diff diff
-# hg-alias df diff
-# hg-alias sl sl
-# hg-alias slr slr
-# hg-alias rl rl
-# hg-alias append append
+hg-alias br bookmark
+hg-alias co update
+hg-alias mg graft        
+hg-alias st status
+hg-alias s summary
+hg-alias br bookmarks
+hg-alias bk bookmarks
+hg-alias l lg
+hg-alias log lg
+hg-alias shl shelve
+hg-alias us unshelve
+hg-alias au addremove
 
 alias h=hg  
