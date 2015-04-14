@@ -62,5 +62,6 @@ hg-alias log lg
 hg-alias shl shelve
 hg-alias us unshelve
 hg-alias au addremove
+hg-alias add add
 
 alias h=hg  
