@@ -14,21 +14,27 @@ function _h-repull() {
 
 function hg-alias() {
 	local hg_alias=$1
-	local hg_cmd=$2  
-	
-  function_name="_hg_complete_$hg_alias"
+	local hg_cmd=${2:-$hg_alias}  
+	install-hg-completion $hg_alias $hg_cmd	
+	alias $hg_alias="hg $hg_cmd"
+}
+
+install-hg-completion() {
+  local cmd=$1
+  local hg_cmd=$2
+
+  function_name="_hg_complete_$cmd"  
+  
   eval "function ${function_name}() {
-#    echo \"function [$function_name] [$hg_alias] [$hg_cmd] [\$COMP_CWORD] []\"
     COMP_WORDS=('hg' \"${hg_cmd}\" \${COMP_WORDS[@]:1} )
     ((COMP_CWORD+=1))              
     let x=\$COMP_CWORD-1                                                    
-#echo _hg \"hg\" \"\${COMP_WORDS[\$COMP_CWORD]}\" \"\${COMP_WORDS[\$x]}\"
     _hg \"hg\" \"\${COMP_WORDS[\$COMP_CWORD]}\" \"\${COMP_WORDS[\$x]}\"
   }
 ";
-	alias $hg_alias="hg $hg_cmd"
-	complete -o bashdefault -o default -o nospace -F $function_name $hg_alias \
-    || complete -o default -o nospace -F $function_name $hg_alias
+	complete -o bashdefault -o default -o nospace -F $function_name $cmd \
+    || complete -o default -o nospace -F $function_name $cmd
+  
 }
 
 hg_cmd_list=`hg help 2>&1 | sed -n -e '/enabled extensions/,$p' | egrep '^ \w+' | grep -v '\#'  |cut -f 2 -d' '`
@@ -49,7 +55,8 @@ for i in `grep '=' $hg_cmd_alias_file | cut -f 1 -d=`; do
   #echo hg-alias $i $i
   hg-alias $i $i
 done
-
+                
+#specific aliases that are different or that we want to induce tab-completion for
 hg-alias br bookmark
 hg-alias co update
 hg-alias mg graft        
@@ -62,8 +69,19 @@ hg-alias log lg
 hg-alias shl shelve
 hg-alias us unshelve
 hg-alias au addremove
-hg-alias add add
 hg-alias rb rebase
-hg-alias sl sl
+hg-alias rslv resolve
+
+# alias where the 'hg <cmd>' is the same as the alias name (explicilty list)
+hg-alias sl
+hg-alias pull
+hg-alias resolve
+hg-alias add         
+hg-alias help
+hg-alias rl
+hg-alias heads
+hg-alias diff
+
+install-hg-completion rbc update
 
 alias h=hg  
