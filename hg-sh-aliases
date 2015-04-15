@@ -81,6 +81,7 @@ hg-alias help
 hg-alias rl
 hg-alias heads
 hg-alias diff
+hg-alias show
 
 install-hg-completion rbc update
 

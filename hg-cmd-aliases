@@ -31,3 +31,4 @@ st = status
 swf= diff -r .^ --stat
 us = unshelve
 wipe = up --clean -r .
+ohs-clear = !ohs | xargs -t $HG strip
