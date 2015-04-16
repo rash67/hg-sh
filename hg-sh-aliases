@@ -71,8 +71,13 @@ hg-alias us unshelve
 hg-alias au addremove
 hg-alias rb rebase
 hg-alias rslv resolve
+hg-alias ev evolve
+hg-alias uc uncommit
 
 # alias where the 'hg <cmd>' is the same as the alias name (explicilty list)
+hg-alias bookmark
+hg-alias clean
+hg-alias status
 hg-alias sl
 hg-alias pull
 hg-alias resolve
