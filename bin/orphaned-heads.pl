@@ -43,7 +43,7 @@ if (@entryLines > 0) {
 sub processEntry {
   my ($entry) = @_;
   
-  if (!defined($entry->{bookmark}) && !defined($entry->{branch})) {   
+  if ((!defined($entry->{bookmark}) || $entry->{bookmark} =~ m#dev1601/#) && !defined($entry->{branch})) {   
     print "$entry->{changeset}\n";      
   }
 }   
