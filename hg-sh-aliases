@@ -90,6 +90,7 @@ hg-alias show
 hg-alias revert
 hg-alias backout
 hg-alias incoming
+hg-alias blame
 
 install-hg-completion rbc update
 
