@@ -38,6 +38,7 @@ install-hg-completion() {
 }
 
 hg_cmd_list=`hg help 2>&1 | sed -n -e '/enabled extensions/,$p' | egrep '^ \w+' | grep -v '\#'  |cut -f 2 -d' '`
+#hg_cmd_list=`hg help 2>&1 | egrep '^ \w+' | grep -v '\#'  |cut -f 2 -d' '`
 
 for i in $hg_cmd_list; do 
   if [[ "$i" == "cat" ]]; then
@@ -92,6 +93,8 @@ hg-alias revert
 hg-alias backout
 hg-alias incoming
 hg-alias blame
+hg-alias branch
+hg-alias push
 
 install-hg-completion rbc update
 
