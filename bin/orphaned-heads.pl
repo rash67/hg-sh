@@ -2,8 +2,9 @@
 
 use strict;                               
     
-my $fh;
-open($fh, "hg heads|")
+my $fh;                   
+my $headsCmd = "hg heads -r 'head() & draft()'";
+open($fh, "$headsCmd|")
   or die "$!";
 
 my @entryLines;
@@ -44,7 +45,7 @@ sub processEntry {
   my ($entry) = @_;
   
   if ((!defined($entry->{bookmark}) || $entry->{bookmark} =~ m#dev1601/#) && !defined($entry->{branch})) {   
-    print "$entry->{changeset}\n";      
+    print "$entry->{changeset}\n";            
   }
 }   
 
