@@ -1,9 +1,10 @@
 #!/usr/bin/perl -w
 
 use strict;                               
-    
+
 my $fh;                   
-my $headsCmd = "hg heads -r 'head() & draft()'";
+#my $headsCmd = "hg heads -r 'head() & draft()'";
+my $headsCmd = "hg heads";
 open($fh, "$headsCmd|")
   or die "$!";
 
@@ -43,9 +44,11 @@ if (@entryLines > 0) {
   ######
 sub processEntry {
   my ($entry) = @_;
-  
+
   if ((!defined($entry->{bookmark}) || $entry->{bookmark} =~ m#dev1601/#) && !defined($entry->{branch})) {   
-    print "$entry->{changeset}\n";            
+    if($entry->{user} =~ m#s?rash\@fb.com#) {
+      print "$entry->{changeset}\n";            
+    }
   }
 }   
 
@@ -57,7 +60,7 @@ sub parseEntry {
   foreach my $line (@$entryLines) {
     next 
       if $line =~ /^\s*$/;
-      #print "line: [$line]\n";
+      
     my ($k, $v) = ($line =~ /^(\w+?):\s*(.*)$/);
     next
       unless defined($k) && defined($v);
