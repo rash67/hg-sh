@@ -7,6 +7,8 @@ my $fh;
 my $headsCmd = "hg heads";
 open($fh, "$headsCmd|")
   or die "$!";
+  
+my $devServerRemote = "dev";
 
 my @entryLines;
 while (my $line = <$fh>) {
@@ -45,7 +47,7 @@ if (@entryLines > 0) {
 sub processEntry {
   my ($entry) = @_;
 
-  if ((!defined($entry->{bookmark}) || $entry->{bookmark} =~ m#dev1601/#) && !defined($entry->{branch})) {   
+  if ((!defined($entry->{bookmark}) || $entry->{bookmark} =~ m#dev/#) && !defined($entry->{branch})) {   
     if($entry->{user} =~ m#s?rash\@fb.com#) {
       print "$entry->{changeset}\n";            
     }

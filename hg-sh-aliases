@@ -95,6 +95,7 @@ hg-alias incoming
 hg-alias blame
 hg-alias branch
 hg-alias push
+hg-alias paths
 
 install-hg-completion rbc update
 
