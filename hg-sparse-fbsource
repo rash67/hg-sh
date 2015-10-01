@@ -1,5 +1,7 @@
 [include]       
 .arcconfig
+.watchmanconfig
+fbcode/.hgignore
 fbcode/.arcconfig
 fbcode/actions
 fbcode/aether
@@ -21,6 +23,7 @@ fbcode/external/quicklz-1.5b/java/src
 fbcode/fbtrace/if
 fbcode/fbtrace/libfbtrace/java/src
 fbcode/hphp/facebook/push_builds_async.php
+fbcode/logdevice/proxy/logdevice.thrift
 fbcode/maestro/if
 fbcode/maestro/if/OdsRouter
 fbcode/messaging/atlas/if
@@ -62,4 +65,4 @@ fbcode/unicorn/hotswap
 fbcode/unicorn/if
 fbcode/wormhole/logstore/if
 
-[exclude]            
+[exclude]
