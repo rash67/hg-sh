@@ -60,6 +60,7 @@ done
 #specific aliases that are different or that we want to induce tab-completion for
 hg-alias br bookmark
 hg-alias co update
+hg-alias ci commit
 hg-alias mg graft        
 hg-alias st status
 hg-alias s summary
@@ -98,6 +99,7 @@ hg-alias push
 hg-alias paths
 hg-alias summary
 hg-alias update
+hg-alias commit
 
 install-hg-completion rbc update
 
