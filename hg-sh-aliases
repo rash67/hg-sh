@@ -100,6 +100,7 @@ hg-alias paths
 hg-alias summary
 hg-alias update
 hg-alias commit
+hg-alias graft
 
 install-hg-completion rbc update
 
