@@ -43,3 +43,4 @@ cur-bk = !$HG bookmark | grep '*' | tr -s ' ' | cut -f 3 -d' '
 slh = sl --hidden --pager always
 showhd = !$HG log --hidden -r "$([[ -n "$1" ]] && echo "$1" || echo ".")" -vp
 nb = !$HG update $2 && $HG bookmark $1
+pushr = push --to master --config extensions.pushrebase=
