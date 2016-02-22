@@ -67,6 +67,12 @@ sub parseEntry {
     next
       unless defined($k) && defined($v);
     #print "adding $k -> $v\n";
+                                          
+    # handles the "(@)" on the changeset lines
+    if ($k eq "changeset") {
+      $v =~ s/\s*\(\@\)//;
+    }
+    
     $h{$k} = $v;
   }
   #print "entry end\n\n\n";
