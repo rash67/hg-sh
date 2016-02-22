@@ -18,6 +18,7 @@ l = log --pager always
 lg = log --pager always --template "{label('custom.rev', 'commit ')} {label('custom.rev', node)}\nAuthor: {author} {user}\nDate: {date|isodate}\n{if(bookmarks, 'bookmarks: {bookmarks}\n')}\n\t{desc|tabindent}\n\n"
 lgh = lg --hidden
 mg = graft
+gr = graft
 nc = uncommit -a
 rb = rebase
 rbm = histedit 'only(.,master)'
