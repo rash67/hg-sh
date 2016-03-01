@@ -70,7 +70,7 @@ sub parseEntry {
                                           
     # handles the "(@)" on the changeset lines
     if ($k eq "changeset") {
-      $v =~ s/\s*\(\@\)//;
+      ($v) = ($v =~ /^\s*(\w+)\s*/);
     }
     
     $h{$k} = $v;
