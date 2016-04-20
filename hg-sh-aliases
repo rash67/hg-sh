@@ -17,6 +17,10 @@ function hg-alias() {
 	local hg_cmd=${2:-$hg_alias}  
 	install-hg-completion $hg_alias $hg_cmd	
 	alias $hg_alias="hg $hg_cmd"
+
+	if [[ "$hg_alias" != "$hg_cmd" ]]; then
+	  alias $hg_cmd="hg $hg_cmd"
+	fi
 }
 
 install-hg-completion() {
@@ -55,8 +59,8 @@ hg_cmd_alias_file="$hg_sh_path/hg-cmd-aliases"
 for i in `grep '=' $hg_cmd_alias_file | cut -f 1 -d=`; do 
   #echo hg-alias $i $i
   hg-alias $i $i
-done
-                
+done            
+
 #specific aliases that are different or that we want to induce tab-completion for
 hg-alias br bookmark
 hg-alias co update
@@ -78,12 +82,9 @@ hg-alias uc uncommit
 hg-alias he histedit
 
 # alias where the 'hg <cmd>' is the same as the alias name (explicilty list)
-hg-alias bookmark
 hg-alias clean
-hg-alias status
 hg-alias sl
 hg-alias pull
-hg-alias resolve
 hg-alias add         
 hg-alias help
 hg-alias rl
@@ -97,10 +98,6 @@ hg-alias blame
 hg-alias branch
 hg-alias push
 hg-alias paths
-hg-alias summary
-hg-alias update
-hg-alias commit
-hg-alias graft
 
 install-hg-completion rbc update
 
