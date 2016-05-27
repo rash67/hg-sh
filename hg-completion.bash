@@ -106,6 +106,13 @@ _hg_bookmarks()
     local bookmarks="$(_hg_cmd bookmarks -q)"
     local IFS=$'\n'
     COMPREPLY=(${COMPREPLY[@]:-} $(compgen -W '$bookmarks' -- "$cur"))
+}                                                                                               
+
+_hg_cmdokmarks()
+{
+  local remote_bookmarks="$(_hg_cmd bookmarks --remote -q)"
+  local IFS=$'\n'
+  COMPREPLY=(${COMPREPLY[@]:-} $(compgen -W '$remote_bookmarks' -- "$cur"))  
 }
 
 _hg_labels()
@@ -289,6 +296,7 @@ _hg_command_specific()
         pull|push|outgoing|incoming)
             _hg_paths
             _hg_repos
+            _hg_remote_bookmarks
         ;;
         paths)
             _hg_paths
@@ -698,4 +706,12 @@ _hg_cmd_shelve()
 _hg_cmd_unshelve()
 {
     _hg_shelves
+}                                      
+
+_hg_cmd_push()
+{                       
+    if [[ "$prev" = "--to" ]]; then
+        _hg_remote_bookmarks
+    fi
+    return
 }
