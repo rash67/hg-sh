@@ -1,0 +1,59 @@
+# example repository config (see "hg help config" for more info)
+[paths]
+default = ssh://hg-vip//data/scm/fbsource
+dev =  ssh://dev//data/users/srash/fbsource
+
+# path aliases to other clones of this repo in URLs or filesystem paths
+# (see "hg help config.paths" for more info)
+#
+# default-push = ssh://jdoe@example.net/hg/jdoes-fork
+# my-fork      = ssh://jdoe@example.net/hg/jdoes-fork
+# my-clone     = /home/jdoe/jdoes-clone
+rohan = ssh://dev2490.prn2.facebook.com/home/rohan/local/fbsource
+ctang = ssh://dev1068.prn1.facebook.com/home/ctang/local/fbsource
+default-push = ssh://hg-vip//data/scm/fbsource
+
+[ui]
+# name and email (local to this repository, optional), e.g.
+# username = Jane Doe <jdoe@example.com>
+# please place any additional configuration below this include
+# otherwise, it may be overriden by this include
+%include /etc/mercurial/repo-specific/fbsource.rc
+
+username = Sam Rash <srash@fb.com>
+merge=internal:merge
+ignore=~/.hgignore
+
+[extensions]
+inhibit=!
+directaccess=!
+sparse=
+evolve=
+hgwatchman=            
+fbamend=!                        
+color=
+pushrebase=
+
+[experimental]
+evolution=all
+rebaseskipobsolete=False
+
+[trusted]
+users = rohan
+groups = users
+
+[color]
+custom.rev = yellow
+ 
+[remotefilelog]
+pullprefetch = master
+
+[remotenames]
+forceto = True
+
+[smartlog]
+names = master stable
+repos = remote/
+
+
+%include ~/src/hg/hg-cmd-aliases
