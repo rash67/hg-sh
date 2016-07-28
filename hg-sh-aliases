@@ -1,9 +1,9 @@
 function _h-nb() {
   if [[ $2 != "" ]]; then
-			hg update $2             
-	fi
-	
-	hg bookmarks $1
+    hg update $2             
+  fi
+  
+  hg bookmarks $1
 }
 
 function _h-repull() {

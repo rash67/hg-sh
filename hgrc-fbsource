@@ -29,10 +29,10 @@ inhibit=!
 directaccess=!
 sparse=
 evolve=
-hgwatchman=            
 fbamend=!                        
 color=
 pushrebase=
+sampling=!
 
 [experimental]
 evolution=all
@@ -57,3 +57,6 @@ repos = remote/
 
 
 %include ~/src/hg/hg-cmd-aliases
+
+[extensions]
+share=
