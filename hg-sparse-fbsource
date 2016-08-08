@@ -1,11 +1,22 @@
+
 [include]       
+fbcode/doublehelix/le/if
+fbcode/instagram/data/embeddings/if
+fbcode/search/facebar/if
+fbcode/search/ig_media/if
+fbcode/search/keyword_extraction/if
+fbcode/search/posts/if/
+fbcode/search/speller/if
+fbcode/configerator/structs/search/counters
+fbcode/nlp_tools/taggers/common/if                       
 .arcconfig
 .watchmanconfig
-fbcode/.hgignore
 fbcode/.arcconfig
+fbcode/.hgignore
 fbcode/actions
 fbcode/aether
 fbcode/arcanist
+fbcode/artillery/if
 fbcode/cacheclient/service/tao/if
 fbcode/ccif
 fbcode/common/clientpool
@@ -15,6 +26,7 @@ fbcode/common/fb303/java/src
 fbcode/common/logging/java/nectar/src/main/java
 fbcode/common/smc/if
 fbcode/common/smc/java/src
+fbcode/configerator/structs/login/service/if
 fbcode/configerator/structs/messaging
 fbcode/configerator/structs/titan
 fbcode/crypto/crypto_service/if
@@ -48,14 +60,14 @@ fbcode/search/lib/pattern_parser/if
 fbcode/search/minutiae/if
 fbcode/security/logging/if
 fbcode/security/logging/java/src
+fbcode/servicerouter
 fbcode/sigrid/lib/features/if
 fbcode/smc/smcproxy/if
-fbcode/servicerouter
 fbcode/taoThriftService
 fbcode/text/mdif
 fbcode/text/topictagger/if
-fbcode/thrift/lib/java
 fbcode/thrift/lib/cpp
+fbcode/thrift/lib/java
 fbcode/titan
 fbcode/titan/cachius/if
 fbcode/titan/common/src
@@ -73,7 +85,7 @@ fbcode/tupperware/config
 fbcode/unicorn/figtable/if
 fbcode/unicorn/hotswap
 fbcode/unicorn/if          
-fbcode/zippydb
 fbcode/wormhole/logstore/if
+fbcode/zippydb
 
 [exclude]
