@@ -82,6 +82,7 @@ hg-alias uc uncommit
 hg-alias he histedit
 
 # alias where the 'hg <cmd>' is the same as the alias name (explicilty list)
+hg-alias journal
 hg-alias clean
 hg-alias sl
 hg-alias pull
