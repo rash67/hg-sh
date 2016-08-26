@@ -19,14 +19,14 @@ my $date = strftime("%Y-%m-%d", localtime);
 my $datetime = strftime("%Y-%m-%dT%H:%M:%S", localtime);
 my $log = "$logDir/$date.out";
 my $st = time();
-
 my $cmd = "$hg @ARGV";
-system("$hg @ARGV");  
-my $exitCode = $?;
+my $exitCode = system("$hg @ARGV");  
 my $ed = time();   
 my $d = $ed - $st;
 open(F, ">> $log");
 print F "$d, $datetime, $hgRoot, $cmd\n";
 close(F);         
-
+$exitCode = $exitCode >> 8;
+              
+#print $exitCode, "\n";
 exit($exitCode);
