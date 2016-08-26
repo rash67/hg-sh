@@ -15,7 +15,8 @@
 
 
 readlink_cmd='readlink -f'
-                                   
+hgb='/Users/srash/bin/hg'                                   
+hg_root='/Users/srash/bin/hg-root.pl'
 if uname -a | grep -qi "darwin" ; then
   readlink_cmd='readlink.sh'
 fi
@@ -35,7 +36,7 @@ _hg_ps1() {
 }
 
 _hg_dirty() {
-	if [[ "`hg status`" = "" ]] ; then
+	if [[ "`$hgb status`" = "" ]] ; then
 		echo -ne ""
 	else
     _color_apply " *" $Red
@@ -48,7 +49,8 @@ _hg_bang() {
 }
 
 _hg_workdir() {
-	subdir=`hg root`
+	#subdir=`$hgb root`
+	subdir=`$hg_root`
 	subdir="${subdir#/}"
   subdir="${subdir%/*}"
   dir=`$readlink_cmd $PWD`

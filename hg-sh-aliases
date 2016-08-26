@@ -1,25 +1,26 @@
+hg='/Users/srash/bin/hg'
 function _h-nb() {
   if [[ $2 != "" ]]; then
-    hg update $2             
+    $hg update $2             
   fi
   
-  hg bookmarks $1
+  $hg bookmarks $1
 }
 
 function _h-repull() {
   bookmark=`hg bo | grep '*' | cut -f 3 -d' '`
-	hg pull --rebase
-	hg update $bookmark
+	$hg pull --rebase
+	$hg update $bookmark
 }
 
 function hg-alias() {
 	local hg_alias=$1
 	local hg_cmd=${2:-$hg_alias}  
 	install-hg-completion $hg_alias $hg_cmd	
-	alias $hg_alias="hg $hg_cmd"
+	alias $hg_alias="$hg $hg_cmd"
 
 	if [[ "$hg_alias" != "$hg_cmd" ]]; then
-	  alias $hg_cmd="hg $hg_cmd"
+	  alias $hg_cmd="$hg $hg_cmd"
 	fi
 }
 
@@ -102,4 +103,4 @@ hg-alias paths
 
 install-hg-completion rbc update
 
-alias h=hg  
+alias h=$hg  
