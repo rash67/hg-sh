@@ -1,26 +1,31 @@
-hg='/Users/srash/bin/hg'
+if [[ -e '/etc/fbwhoami' ]]; then
+    hgb='hg'
+else
+    hgb='/Users/srash/bin/hg'                                  
+fi
+
 function _h-nb() {
   if [[ $2 != "" ]]; then
-    $hg update $2             
+    $hgb update $2             
   fi
   
-  $hg bookmarks $1
+  $hgb bookmarks $1
 }
 
 function _h-repull() {
   bookmark=`hg bo | grep '*' | cut -f 3 -d' '`
-	$hg pull --rebase
-	$hg update $bookmark
+	$hgb pull --rebase
+	$hgb update $bookmark
 }
 
 function hg-alias() {
 	local hg_alias=$1
 	local hg_cmd=${2:-$hg_alias}  
 	install-hg-completion $hg_alias $hg_cmd	
-	alias $hg_alias="$hg $hg_cmd"
+	alias $hg_alias="$hgb $hg_cmd"
 
 	if [[ "$hg_alias" != "$hg_cmd" ]]; then
-	  alias $hg_cmd="$hg $hg_cmd"
+	  alias $hg_cmd="$hgb $hg_cmd"
 	fi
 }
 
@@ -103,4 +108,4 @@ hg-alias paths
 
 install-hg-completion rbc update
 
-alias h=$hg  
+alias h=$hgb

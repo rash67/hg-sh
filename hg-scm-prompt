@@ -15,8 +15,13 @@
 
 
 readlink_cmd='readlink -f'
-hgb='/Users/srash/bin/hg'                                   
-hg_root='/Users/srash/bin/hg-root.pl'
+if [[ -e '/etc/fbwhoami' ]]; then
+    hgb='hg'
+else
+    hgb='/Users/srash/bin/hg'                                  
+fi
+hg_root='hg-root.pl'
+
 if uname -a | grep -qi "darwin" ; then
   readlink_cmd='readlink.sh'
 fi
