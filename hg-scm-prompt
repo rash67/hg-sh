@@ -15,10 +15,11 @@
 
 
 readlink_cmd='readlink -f'
+
 if [[ -e '/etc/fbwhoami' ]]; then
-    hgb='hg'
+    hgb='/home/srash/bin/hg'
 else
-    hgb='/Users/srash/bin/hg'                                  
+    hgb='/Users/srash/bin/hg'
 fi
 hg_root='hg-root.pl'
 
