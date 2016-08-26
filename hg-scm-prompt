@@ -21,7 +21,8 @@ if [[ -e '/etc/fbwhoami' ]]; then
 else
     hgb='/Users/srash/bin/hg'
 fi
-hg_root='hg-root.pl'
+#hg_root='hg-root.pl'
+hg_root='hgroot'
 
 if uname -a | grep -qi "darwin" ; then
   readlink_cmd='readlink.sh'
@@ -77,6 +78,26 @@ _color_apply() {
 	local fg_color="$2"
 	local bg_color="$3" || ""
 	echo -ne "\[$fg_color$bg_color\]$output"
+}
+
+_hgroot_helper() {
+    for ((i=40; i>0; i--)); do
+    	if [ -d .hg ]; then
+    	    printf '%s\n' "$PWD"
+    	    return 0
+    	fi
+    	if [ / = "$PWD" ]; then
+    	    return 0
+    	fi
+        cd -P ..
+    done
+    echo "hgroot: couldn't find FS root?" >&2
+    return 1
+}
+
+hgroot() {
+    (_hgroot_helper)
+    return $?
 }
 
 _dotfiles_scm_info()

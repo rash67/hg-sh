@@ -1,7 +1,6 @@
 #!/bin/bash
 
 #set -x                              
-
 get_current_pwd() {
   script_path=`$readlink_cmd  $0`
   path=`dirname $script_path`
