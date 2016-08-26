@@ -22,8 +22,11 @@ my $st = time();
 
 my $cmd = "$hg @ARGV";
 system("$hg @ARGV");  
+my $exitCode = $?;
 my $ed = time();   
 my $d = $ed - $st;
 open(F, ">> $log");
 print F "$d, $datetime, $hgRoot, $cmd\n";
-close(F);
+close(F);         
+
+exit($exitCode);
