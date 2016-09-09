@@ -54,20 +54,6 @@
 
 shopt -s extglob
 
-_find_root()
-{
-    # Finds the repo root
-    d=$PWD
-    while : ; do
-        if [[ -d "$d/.hg" ]]; then
-            echo $d
-            return
-        fi
-        [[ "$d" = / ]] && break
-        d=$(cd -P "$d/.." && echo "$PWD")
-    done
-}
-
 _hg_cmd()
 {
     HGPLAIN=1 "$hg" "$@" 2>/dev/null
@@ -101,55 +87,39 @@ _hg_debugpathcomplete()
     COMPREPLY=(${COMPREPLY[@]:-} $(compgen -W '$files' -- "$cur"))
 }
 
+_hg_status()
+{
+    local files="$(_hg_cmd status -n$1 "glob:$cur**")"
+    local IFS=$'\n'
+    COMPREPLY=(${COMPREPLY[@]:-} $(compgen -W '$files' -- "$cur"))
+}
+
 _hg_branches()
 {
     local branches="$(_hg_cmd branches -q)"
     local IFS=$'\n'
     COMPREPLY=(${COMPREPLY[@]:-} $(compgen -W '$branches' -- "$cur"))
 }
-
+             
 _hg_bookmarks()
 {
-    local root=$(_find_root)
-    if [[ -n "$root" && -e "$root/.hg/bookmarks" ]]; then
-        local IFS=$'\n'
-        local bookmarks=$(cut -c42- "$root/.hg/bookmarks" )
-        COMPREPLY=(${COMPREPLY[@]:-} $(compgen -W '$bookmarks' -- "$cur"))
-    fi
-}
+    local bookmarks="$(_hg_cmd bookmarks -q)"
+    local IFS=$'\n'
+    COMPREPLY=(${COMPREPLY[@]:-} $(compgen -W '$bookmarks' -- "$cur"))
+}                                                                                               
 
-_hg_remotebookmarks()
+_hg_cmdokmarks()
 {
-    local root=$(_find_root)
-    if [[ -n "$root" && -e "$root/.hg/remotenames" ]]; then
-        local IFS=$'\n'
-        # Raw remotes first
-        local bookmarks=$(awk '$2 == "bookmarks" {print substr($0,52)}' "$root/.hg/remotenames")
-        COMPREPLY=(${COMPREPLY[@]:-} $(compgen -W '$bookmarks' -- "$cur"))
-        # Hoisted second
-        local bookmarks=$(awk  '/bookmarks remote\// {print substr($0,59)}' "$root/.hg/remotenames")
-        COMPREPLY=(${COMPREPLY[@]:-} $(compgen -W '$bookmarks' -- "$cur"))
-    fi
-}
-
-_hg_hashes()
-{
-    local root=$(_find_root)
-    if [[ -n "$root" ]]; then
-        local hint_file="$root/.hg/completionhints"
-        if [ -e "$hint_file" ]; then
-            local IFS=$'\n'
-            local hints=$(< "$hint_file")
-            COMPREPLY=(${COMPREPLY[@]:-} $(compgen -W '$hints' -- "$cur"))
-        fi
-    fi
+  local remote_bookmarks="$(_hg_cmd bookmarks --remote -q)"
+  local IFS=$'\n'
+  COMPREPLY=(${COMPREPLY[@]:-} $(compgen -W '$remote_bookmarks' -- "$cur"))  
 }
 
 _hg_labels()
 {
-    _hg_hashes
-    _hg_bookmarks
-    _hg_remotebookmarks
+    local labels="$(_hg_cmd debugnamecomplete "$cur")"
+    local IFS=$'\n'
+    COMPREPLY=(${COMPREPLY[@]:-} $(compgen -W '$labels' -- "$cur"))
 }
 
 # this is "kind of" ugly...
@@ -185,12 +155,15 @@ _hg_fix_wordlist()
 
 _hg()
 {
+    #echo "_hg: [$1] [${COMP_WORDS[$COMP_CWORD]}] [${COMP_WORDS[$COMP_CWORD-1]}] [${COMP_WORDS[@]}] [$COMP_CWORD]\n"
+
     local cur prev cmd cmd_index opts i aliashg
     # global options that receive an argument
     local global_args='--cwd|-R|--repository'
     local hg="$1"
     local canonical=0
 
+      
     aliashg=$(alias $hg 2>/dev/null)
     if [[ -n "$aliashg" ]]; then
       aliashg=${aliashg#"alias $hg='"}
@@ -201,6 +174,8 @@ _hg()
     COMPREPLY=()
     cur="$2"
     prev="$3"
+
+    #echo "cur: [$cur] prev [$prev]\n"
 
     # searching for the command
     # (first non-option argument that doesn't follow a global option that
@@ -214,8 +189,6 @@ _hg()
             fi
         fi
     done
-
-    _hg_resolve_cmd
 
     if [[ "$cur" == -* ]]; then
         if [ "$(type -t "_hg_opt_$cmd")" = function ] && "_hg_opt_$cmd"; then
@@ -251,43 +224,24 @@ _hg()
         return
     fi
 
+    # try to generate completion candidates for whatever command the user typed
+    local help
+    if _hg_command_specific; then
+        _hg_fix_wordlist
+        return
+    fi
+
+    # canonicalize the command name and try again
+    help=$(_hg_cmd help "$cmd")
+    if [ $? -ne 0 ]; then
+        # Probably either the command doesn't exist or it's ambiguous
+        return
+    fi
+    cmd=${help#hg }
+    cmd=${cmd%%[$' \n']*}
+    canonical=1
     _hg_command_specific
     _hg_fix_wordlist
-}
-
-_hg_resolve_cmd()
-{
-    local resolvedcmd resolutions
-    if _hg_is_command $cmd ; then
-        return
-    fi
-
-    resolvedcmd=$(grep "^${cmd}" <<< "$COMMAND_LIST")
-    resolutions=$(wc -l <<< "$resolvedcmd")
-    if [[ -n $resolvedcmd ]] ; then
-        if [[ $resolutions != 1 ]] ; then
-            # Ambiguous result, just bail early
-            return
-        fi
-        if _hg_is_command $resolvedcmd ; then
-            cmd=$resolvedcmd
-            return
-        fi
-    fi
-
-    local aliascmd="$(HGPLAINEXCEPT=alias _hg_cmd showconfig alias.$cmd | awk '{print $1}')"
-    if [[ -n $aliascmd ]] ; then
-        cmd=$aliascmd
-        return
-    fi
-}
-
-_hg_is_command()
-{
-    if grep -q "^$1\$" <<< "$COMMAND_LIST" ; then
-        return 0
-    fi
-    return 1
 }
 
 _hg_command_specific()
@@ -300,19 +254,31 @@ _hg_command_specific()
     if [ "$cmd" != status ]; then
         case "$prev" in
             -r|--rev)
-                _hg_labels
-                return 0
+                if [[ $canonical = 1 || status != "$cmd"* ]]; then
+                    _hg_labels
+                    return 0
+                fi
+                return 1
             ;;
             -B|--bookmark)
-                _hg_bookmarks
-                return 0
+                if [[ $canonical = 1 || status != "$cmd"* ]]; then
+                    _hg_bookmarks
+                    return 0
+                fi
+                return 1
             ;;
             -b|--branch)
-                _hg_branches
-                return 0
+                if [[ $canonical = 1 || status != "$cmd"* ]]; then
+                    _hg_branches
+                    return 0
+                fi
+                return 1
             ;;
         esac
     fi
+
+    local aliascmd=$(_hg_cmd showconfig alias.$cmd | awk '{print $1}')
+    [ -n "$aliascmd" ] && cmd=$aliascmd
 
     case "$cmd" in
         help)
@@ -324,30 +290,25 @@ _hg_command_specific()
             fi
             _hg_labels
         ;;
-        bookmarks)
-            _hg_bookmarks
-        ;;
-        log)
-        ;;
         manifest|update|up|checkout|co)
             _hg_labels
         ;;
         pull|push|outgoing|incoming)
             _hg_paths
             _hg_repos
+            _hg_remote_bookmarks
         ;;
         paths)
             _hg_paths
         ;;
         add)
+            _hg_status "u"
         ;;
         merge)
             _hg_labels
         ;;
-        show)
-            _hg_labels
-        ;;
         commit|ci|record)
+            _hg_status "mar"
         ;;
         remove|rm)
             _hg_debugpathcomplete -n
@@ -356,6 +317,7 @@ _hg_command_specific()
             _hg_debugpathcomplete -fa
         ;;
         diff)
+            _hg_status "mar"
         ;;
         revert)
             _hg_debugpathcomplete
@@ -381,11 +343,72 @@ _hg_command_specific()
     return 0
 }
 
-complete -o bashdefault -o default -o nospace -F _hg hg \
-    || complete -o default -o nospace -F _hg hg
+_h-dash() {
+  #echo "a:[$@] cw:[${COMP_WORDS[@]}] cwi:[$COMP_CWORD]\n"; 
+  cmd=${COMP_WORDS[0]}
+  
+  if [[ $cmd = h-* ]]; then
+    IFS=' ' read -a args <<< `alias $cmd | cut -f 2 -d= | tr -d \'`
+    COMP_WORDS=(${args[@]} ${COMP_WORDS[@]:1} )
+    #echo "#: ${#args[@]} [${args[@]}]"
+    ((COMP_CWORD+=(${#args[@]} - 1)))              
+    #echo "cw/cwi: [${COMP_WORDS[@]}] [$COMP_CWORD] [${args[0]}] [${COMP_WORDS[$COMP_CWORD]}] [${COMP_WORDS[$COMP_CWORD-1]}]\n"
+    let x=$COMP_CWORD-1
+    _hg "${args[0]}" "${COMP_WORDS[$COMP_CWORD]}" "${COMP_WORDS[$x]}"
+  else 
+    _hg $1 $2 $3
+  fi
+  return
+}
 
+install-complete() {
+  complete -o bashdefault -o default -o nospace -F _h-dash $1 \
+      || complete -o default -o nospace -F _h-dash $1   
+}
+
+complete -o bashdefault -o default -o nospace -F _hg hg \
+    || complete -o default -o nospace -F _hg hg 
+complete -o bashdefault -o default -o nospace -F _hg h \
+    || complete -o default -o nospace -F _hg h
+for a in h-br h-co h-st h-s h-log h-lg h-back h-nc h-rb h-hei h-he h-rt \
+         hg-br hg-co hg-st hg-s hg-log hg-lg hg-back hg-nc hg-rb hg-hei hg-he hg-rt \
+       ; do
+    install-complete $a;
+done
 
 # Completion for commands provided by extensions
+
+_hg_cmd_uncommit()
+{
+  _hg_labels
+  return
+}
+
+_hg_cmd_log()
+{
+  _hg_labels
+  return
+}
+
+_hg_cmd_show()
+{
+  _hg_labels
+  return
+}
+
+_hg_cmd_histedit()
+{
+  _hg_labels
+  return
+}
+
+
+# bookmarks
+_hg_cmd_bookmarks()
+{
+    _hg_bookmarks
+    return
+}
 
 # mq
 _hg_ext_mq_patchlist()
@@ -675,99 +698,20 @@ _hg_cmd_shelve()
 {
     if [[ "$prev" = @(-d|--delete|-l|--list) ]]; then
         _hg_shelves
+    else
+        _hg_status "mard"
     fi
 }
 
 _hg_cmd_unshelve()
 {
     _hg_shelves
-}
+}                                      
 
-COMMAND_LIST=$(cat <<EOF
-add
-addremove
-amend
-annotate
-backout
-bisect
-blackbox
-blame
-bookmarks
-branch
-branches
-bundle
-cat
-checkout
-chistedit
-ci
-clone
-co
-commit
-config
-copy
-cp
-diff
-export
-files
-forget
-githelp
-graft
-heads
-help
-histedit
-histgrep
-history
-id
-identify
-import
-incoming
-init
-locate
-log
-manifest
-merge
-move
-mv
-outgoing
-parents
-patch
-paths
-phase
-pull
-purge
-push
-rage
-rebase
-recover
-reflog
-remove
-rename
-reset
-resolve
-revert
-rm
-rollback
-root
-serve
-shelve
-show
-showconfig
-sl
-smartlog
-sparse
-st
-status
-strip
-sum
-summary
-tag
-tags
-tip
-unbundle
-unshelve
-up
-update
-verify
-version
-EOF
-)
+_hg_cmd_push()
+{                       
+    if [[ "$prev" = "--to" ]]; then
+        _hg_remote_bookmarks
+    fi
+    return
+}
