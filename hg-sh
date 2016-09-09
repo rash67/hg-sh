@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#set -x                              
+#set -x
 get_current_pwd() {
   script_path=`$readlink_cmd  $0`
   path=`dirname $script_path`
@@ -16,17 +16,25 @@ set_hg_sh_path() {
 
 hg_bootstrap() {
   hg_sh_path=$1
-  source ~/.bashrc                              
+  bash_completion_script=$HG_BASH_COMPLETION
+  
+  if [ "$bash_completion_script" = "" ]; then  
+      bash_completion_script="$hg_sh_path/hg-completion.bash"
+  fi
+  
+  echo -e "bash completion script: $bash_completion_script\n"
+  
+  source ~/.bashrc
   source $hg_sh_path/hg-colors
   source $hg_sh_path/hg-sh-aliases "$hg_sh_path"
-  source $hg_sh_path/hg-completion.bash
+  source $bash_completion_script
   source $hg_sh_path/hg-scm-prompt
 }
 
 ################################ * main *
 
 readlink_cmd='readlink -f'
-                                   
+
 if uname -a | grep -qi "darwin" ; then
   readlink_cmd='readlink.sh'
 fi
@@ -36,7 +44,7 @@ set_hg_sh_path
 
 if [ "$0" != 'bash' ]; then
   exec /usr/bin/env bash --rcfile "$0" "$@"
-else  
+else
   hg_bootstrap $path
 fi
 
