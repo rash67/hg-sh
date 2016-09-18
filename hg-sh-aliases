@@ -86,6 +86,7 @@ hg-alias rslv resolve
 hg-alias ev evolve
 hg-alias uc uncommit
 hg-alias he histedit
+hg-alias rm remove
 
 # alias where the 'hg <cmd>' is the same as the alias name (explicilty list)
 hg-alias journal
