@@ -1,0 +1,86 @@
+#!/usr/bin/perl -w
+
+use strict;
+
+my $hg = "/usr/local/bin/hg";
+my $hgw = "/Users/srash/bin/hg";
+my $hgCatWrapper = "/Users/srash/bin/hg-cat-wrapper.pl";
+my @args;                             
+my @pargs;
+
+my %argsMap;
+
+for (my $i = 0; $i < @ARGV; $i++) {
+  my $arg = $ARGV[$i];
+
+  $argsMap{$arg}++;
+}
+
+my $copySeen = 0; # we are in an 'hg copy' command
+my $afterSeen = 0; # idea sends in "--after", the subsequent two arguments are the src/dest files
+my $fileCount = 0;
+my $templateArg = 0;
+# /usr/local/bin/hg --repository /Users/srash/src/fbcode-hg --config extensions.mq= --config ui.merge=internal:merge copy --after titan/prometheus/src/com/facebook/titan/prometheus/dal/IndexAccessor.java titan/prometheus/src/com/facebook/titan/prometheus/dal/Fuu.java --encoding UTF-8
+my $instrumentedCommand = 0;
+
+foreach my $arg (@ARGV) {
+  # if ($arg eq "status") {
+  #   $instrumentedCommand = 1;
+  # }
+  if ($afterSeen){
+     if ($fileCount == 0) {
+       # since we translate hg copy to cp & hg add, we drop this argument here       
+       $fileCount++;
+     } elsif($fileCount == 1) {
+       $fileCount++;
+       push(@args, $arg);
+       push(@pargs, $arg);
+     } else {         
+       # done capturing arguments
+       $afterSeen = 0;
+       push(@args, $arg);
+       push(@pargs, $arg);
+     }   
+  } elsif ($arg eq "copy") {
+    push(@args, "add");
+    push(@pargs, "add");
+    $copySeen = 1;
+  } elsif ($copySeen && $arg eq "--after") {
+    $afterSeen = 1;
+  } elsif ($arg eq "--template") {
+    $templateArg = 1;
+    push(@args, $arg);
+    push(@pargs, $arg);
+  } elsif ($templateArg) {
+    $templateArg = 0;
+    my $parg = $arg;
+    $parg =~ s/\}[^}]+$/\}\\\\n/;
+    $parg =~ s/^.*?\{/\{/;       
+    $parg =~ s/\}[^{]*?\{/\} \{/g;
+    $parg = "\"$parg\"";
+    push(@args, $arg);
+    push(@pargs, $parg);
+  } else { #  } elsif ($arg ne "--git" && $arg ne "-g" && $arg ne "--copies") {
+    push(@args, $arg);
+    push(@pargs, $arg);
+  }
+}                 
+# IMPORTANT: hg requires this to be set for all use in scripts 
+$ENV{HGPLAIN} = 1;                                            
+######
+#push(@args, "--config", "diff.git=False");
+#push(@pargs, "--config", "diff.git=False");
+my $s = join(" ", @pargs);
+#print "$hg $s\n";
+system("echo '$hg $s' >> /tmp/hg.log");
+$hg = $hgw
+  if $instrumentedCommand;
+                  
+if (defined($argsMap{'log'}) && !defined($argsMap{'--limit'})) {
+  exit 0;
+}
+
+exec($hg, @args);  
+
+
+
