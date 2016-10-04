@@ -29,6 +29,9 @@ function hg-alias() {
 	fi
 }
 
+# installs hg completion for a given command. assumes the _hg function performs completion
+# the first argument is the command, the 2nd is which hg command to use for completion.
+# eg: install-hg-completion rbc update makes "rbc <tab>" complete as if "hg update <tab>" were typed
 install-hg-completion() {
   local cmd=$1
   local hg_cmd=$2
