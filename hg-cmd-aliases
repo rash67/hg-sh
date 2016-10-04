@@ -3,6 +3,7 @@ amend-quick = !$HG log -r . | $HG commit -A --amend -l -
 commit-msg = !{ echo "*bookmark: " `$HG cur-bk` & $HG diff -r .^ --stat; }
 commit-msg-new = !{ echo "*bookmark: " `$HG cur-bk` & $HG diff -r . --stat; }
 append = !$HG commit-msg | $HG commit -A --amend -l -
+amd=ci --amend -M.
 chkpoint = !$HG commit-msg-new | $HG commit -A --logfile -
 au = add
 collapse = reset -k .^ 
