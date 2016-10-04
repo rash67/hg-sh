@@ -383,6 +383,8 @@ _hg_command_specific()
 
 complete -o bashdefault -o default -o nospace -F _hg hg \
     || complete -o default -o nospace -F _hg hg
+complete -o bashdefault -o default -o nospace -F _hg h \
+    || complete -o default -o nospace -F _hg h
 
 
 # Completion for commands provided by extensions
