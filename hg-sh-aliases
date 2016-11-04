@@ -111,5 +111,6 @@ hg-alias push
 hg-alias paths
 
 install-hg-completion rbc update
+install-hg-completion rebase-chain.pl update
 
 alias h=$hgb

@@ -24,9 +24,11 @@ fbcode/configerator/structs/messaging
 fbcode/configerator/structs/search/counters
 fbcode/configerator/structs/titan
 fbcode/crypto/crypto_service/if
+fbcode/crypto/crypto_service/bat/if
 fbcode/distfs/if
 fbcode/doublehelix/le/if
 fbcode/employee/if
+fbcode/search/entities/if
 fbcode/everstore/if
 fbcode/external/quicklz-1.5b/java/src
 fbcode/fblearner/if

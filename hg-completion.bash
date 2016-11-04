@@ -381,10 +381,35 @@ _hg_command_specific()
     return 0
 }
 
+# installs hg completion for a given command. assumes the _hg function performs completion
+# the first argument is the command, the 2nd is which hg command to use for completion.
+# eg: install-hg-completion rbc update makes "rbc <tab>" complete as if "hg update <tab>" were typed
+install-hg-completion() {
+  local cmd=$1
+  local hg_cmd=$2
+
+  function_name="_hg_complete_$cmd"  
+  
+  eval "function ${function_name}() {
+    COMP_WORDS=('hg' \"${hg_cmd}\" \${COMP_WORDS[@]:1} )
+    ((COMP_CWORD+=1))              
+    let x=\$COMP_CWORD-1                                                    
+    _hg \"hg\" \"\${COMP_WORDS[\$COMP_CWORD]}\" \"\${COMP_WORDS[\$x]}\"
+  }
+";
+	complete -o bashdefault -o default -o nospace -F $function_name $cmd \
+    || complete -o default -o nospace -F $function_name $cmd
+  
+}
+
+
 complete -o bashdefault -o default -o nospace -F _hg hg \
     || complete -o default -o nospace -F _hg hg
 complete -o bashdefault -o default -o nospace -F _hg h \
     || complete -o default -o nospace -F _hg h
+
+install-hg-completion rbc update
+install-hg-completion rebase-chain.pl update
 
 
 # Completion for commands provided by extensions
