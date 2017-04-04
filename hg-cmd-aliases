@@ -1,5 +1,5 @@
 [alias]      
-amend-quick = !$HG log -r . | $HG commit -A --amend -l -
+amend-quick = ci --amend -M.
 commit-msg = !{ echo "*bookmark: " `$HG cur-bk` & $HG diff -r .^ --stat; }
 commit-msg-new = !{ echo "*bookmark: " `$HG cur-bk` & $HG diff -r . --stat; }
 append = !$HG commit-msg | $HG commit -A --amend -l -
