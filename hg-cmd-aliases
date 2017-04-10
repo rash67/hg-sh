@@ -1,15 +1,14 @@
-[alias]      
-amend-quick = ci --amend -M.
+[alias]
 commit-msg = !{ echo "*bookmark: " `$HG cur-bk` & $HG diff -r .^ --stat; }
 commit-msg-new = !{ echo "*bookmark: " `$HG cur-bk` & $HG diff -r . --stat; }
 append = !$HG commit-msg | $HG commit -A --amend -l -
-amd=ci --amend -M.
+amd=amend
 chkpoint = !$HG commit-msg-new | $HG commit -A --logfile -
 au = add
-collapse = reset -k .^ 
+collapse = reset -k .^
 bcr = log -r 'sort(bookmark(), date)' -T '{bookmarks % "{bookmark}\t\t{date|isodate}\n"}'
 bk = bookmark
-br = bookmark  
+br = bookmark
 obs-mk-clean = !$HG strip -r "hidden()" --hidden ; rm .hg/store/obsstore
 df = diff --stat
 sf = diff --stat

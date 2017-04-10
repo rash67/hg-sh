@@ -1,14 +1,14 @@
 if [[ -e '/etc/fbwhoami' ]]; then
     hgb='/home/srash/bin/hg'
 else
-    hgb='/Users/srash/bin/hg'                                  
+    hgb='/Users/srash/bin/hg'
 fi
 
 function _h-nb() {
   if [[ $2 != "" ]]; then
-    $hgb update $2             
+    $hgb update $2
   fi
-  
+
   $hgb bookmarks $1
 }
 
@@ -20,8 +20,8 @@ function _h-repull() {
 
 function hg-alias() {
 	local hg_alias=$1
-	local hg_cmd=${2:-$hg_alias}  
-	install-hg-completion $hg_alias $hg_cmd	
+	local hg_cmd=${2:-$hg_alias}
+	install-hg-completion $hg_alias $hg_cmd
 	alias $hg_alias="$hgb $hg_cmd"
 
 	if [[ "$hg_alias" != "$hg_cmd" ]]; then
@@ -36,27 +36,27 @@ install-hg-completion() {
   local cmd=$1
   local hg_cmd=$2
 
-  function_name="_hg_complete_$cmd"  
-  
+  function_name="_hg_complete_$cmd"
+
   eval "function ${function_name}() {
     COMP_WORDS=('hg' \"${hg_cmd}\" \${COMP_WORDS[@]:1} )
-    ((COMP_CWORD+=1))              
-    let x=\$COMP_CWORD-1                                                    
+    ((COMP_CWORD+=1))
+    let x=\$COMP_CWORD-1
     _hg \"hg\" \"\${COMP_WORDS[\$COMP_CWORD]}\" \"\${COMP_WORDS[\$x]}\"
   }
 ";
 	complete -o bashdefault -o default -o nospace -F $function_name $cmd \
     || complete -o default -o nospace -F $function_name $cmd
-  
+
 }
 
 hg_cmd_list=`hg help 2>&1 | sed -n -e '/enabled extensions/,$p' | egrep '^ \w+' | grep -v '\#'  |cut -f 2 -d' '`
 #hg_cmd_list=`hg help 2>&1 | egrep '^ \w+' | grep -v '\#'  |cut -f 2 -d' '`
 
-for i in $hg_cmd_list; do 
+for i in $hg_cmd_list; do
   if [[ "$i" == "cat" ]]; then
     true
-  else 
+  else
     #echo hg-alias $i $i
     hg-alias $i $i
   fi
@@ -65,16 +65,16 @@ done
 
 hg_sh_path=$1
 hg_cmd_alias_file="$hg_sh_path/hg-cmd-aliases"
-for i in `grep '=' $hg_cmd_alias_file | cut -f 1 -d=`; do 
+for i in `grep '=' $hg_cmd_alias_file | cut -f 1 -d=`; do
   #echo hg-alias $i $i
   hg-alias $i $i
-done            
+done
 
 #specific aliases that are different or that we want to induce tab-completion for
 hg-alias br bookmark
 hg-alias co update
 hg-alias ci commit
-hg-alias mg graft        
+hg-alias mg graft
 hg-alias st status
 hg-alias s summary
 hg-alias br bookmarks
@@ -96,7 +96,7 @@ hg-alias journal
 hg-alias clean
 hg-alias sl
 hg-alias pull
-hg-alias add         
+hg-alias add
 hg-alias help
 hg-alias rl
 hg-alias heads
@@ -109,6 +109,9 @@ hg-alias blame
 hg-alias branch
 hg-alias push
 hg-alias paths
+hg-alias amend
+hg-alias mv
+hg-alias rm
 
 install-hg-completion rbc update
 install-hg-completion rebase-chain.pl update
