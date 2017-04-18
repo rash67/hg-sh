@@ -71,47 +71,49 @@ for i in `grep '=' $hg_cmd_alias_file | cut -f 1 -d=`; do
 done
 
 #specific aliases that are different or that we want to induce tab-completion for
-hg-alias br bookmark
-hg-alias co update
-hg-alias ci commit
-hg-alias mg graft
-hg-alias st status
-hg-alias s summary
-hg-alias br bookmarks
+hg-alias au addremove
 hg-alias bk bookmarks
+hg-alias br bookmark
+hg-alias br bookmarks
+hg-alias ci commit
+hg-alias co update
+hg-alias ev evolve
+hg-alias he histedit
 hg-alias l lg
 hg-alias log lg
-hg-alias shl shelve
-hg-alias us unshelve
-hg-alias au addremove
+hg-alias mg graft
 hg-alias rb rebase
-hg-alias rslv resolve
-hg-alias ev evolve
-hg-alias uc uncommit
-hg-alias he histedit
 hg-alias rm remove
+hg-alias rslv resolve
+hg-alias s summary
+hg-alias shl shelve
+hg-alias st status
+hg-alias uc uncommit
+hg-alias us unshelve
 
 # alias where the 'hg <cmd>' is the same as the alias name (explicilty list)
-hg-alias journal
-hg-alias clean
-hg-alias sl
-hg-alias pull
 hg-alias add
-hg-alias help
-hg-alias rl
-hg-alias heads
-hg-alias diff
-hg-alias show
-hg-alias revert
+hg-alias amend
 hg-alias backout
-hg-alias incoming
 hg-alias blame
 hg-alias branch
-hg-alias push
-hg-alias paths
-hg-alias amend
+hg-alias clean
+hg-alias diff
+hg-alias heads
+hg-alias help
+hg-alias incoming
+hg-alias journal
 hg-alias mv
+hg-alias paths
+hg-alias pull
+hg-alias push
+hg-alias restack
+hg-alias revert
+hg-alias rl
 hg-alias rm
+hg-alias show
+hg-alias sl
+
 
 install-hg-completion rbc update
 install-hg-completion rebase-chain.pl update
