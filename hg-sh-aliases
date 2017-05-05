@@ -92,6 +92,7 @@ hg-alias uc uncommit
 hg-alias us unshelve
 
 # alias where the 'hg <cmd>' is the same as the alias name (explicilty list)
+hg-alias absorb
 hg-alias add
 hg-alias amend
 hg-alias backout
