@@ -108,6 +108,7 @@ hg-alias mv
 hg-alias paths
 hg-alias pull
 hg-alias push
+hg-alias pushbackup
 hg-alias restack
 hg-alias revert
 hg-alias rl
